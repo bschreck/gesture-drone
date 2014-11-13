@@ -18,5 +18,7 @@ BIN_DIR = ../Bin
 
 USED_LIBS += OpenNI XnVNite_1_5_2
 
+LIB_DIRS += /usr/local/lib
+
 include ../Build/Common/CommonCppMakefile
 #include ../../Common/CommonCppMakefile

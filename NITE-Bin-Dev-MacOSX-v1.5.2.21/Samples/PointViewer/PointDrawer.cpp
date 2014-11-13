@@ -69,10 +69,10 @@ void XnVPointDrawer::OnPointUpdate(const XnVHandPointContext* cxt)
 	// positions are kept in projective coordinates, since they are only used for drawing
 	XnPoint3D ptProjective(cxt->ptPosition);
 
-	if (bShouldPrint){
-    printf("Point (%f,%f,%f)", ptProjective.X, ptProjective.Y, ptProjective.Z);
-    printf("FUCK THIS");
-  }
+//	if (bShouldPrint){
+    printf("Point (%d,%d,%d)", int(ptProjective.X), int(ptProjective.Y), int(ptProjective.Z));
+    printf("THIS should print");
+//  }
 	m_DepthGenerator.ConvertRealWorldToProjective(1, &ptProjective, &ptProjective);
 	if (bShouldPrint)printf(" -> (%f,%f,%f)\n", ptProjective.X, ptProjective.Y, ptProjective.Z);
 

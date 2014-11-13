@@ -16,7 +16,7 @@
 
 void XN_CALLBACK_TYPE SessionStart(const XnPoint3D& ptPosition, void* UserCxt)
 {
-	printf("session start: (%f,%f,%f)\n", ptPosition.X, ptPosition.Y, ptPosition.Z);
+	printf("2session start: (%f,%f,%f)\n", ptPosition.X, ptPosition.Y, ptPosition.Z);
 }
 
 void XN_CALLBACK_TYPE SessionEnd(void* UserCxt)
