@@ -1,0 +1,2 @@
+xst -ise "/afs/athena.mit.edu/user/l/e/leegross/Documents/6.111/FINAL/FINAL/FINAL.ise" -intstyle ise -ifn "/afs/athena.mit.edu/user/l/e/leegross/Documents/6.111/FINAL/FINAL/gest_rec.xst" -ofn "/afs/athena.mit.edu/user/l/e/leegross/Documents/6.111/FINAL/FINAL/gest_rec.syr"
+xst -ise "/afs/athena.mit.edu/user/l/e/leegross/Documents/6.111/FINAL/FINAL/FINAL.ise" -intstyle ise -ifn "/afs/athena.mit.edu/user/l/e/leegross/Documents/6.111/FINAL/FINAL/gest_rec.xst" -ofn "/afs/athena.mit.edu/user/l/e/leegross/Documents/6.111/FINAL/FINAL/gest_rec.syr"

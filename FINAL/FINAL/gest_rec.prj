@@ -1,0 +1,6 @@
+verilog work "../sources/Roll.v"
+verilog work "../sources/on_off_state.v"
+verilog work "../sources/On_FSM.v"
+verilog work "../sources/Off_FSM.v"
+verilog work "../sources/Hover.v"
+verilog work "../sources/Gest_Rec.v"
