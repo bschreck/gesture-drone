@@ -12,6 +12,8 @@
 #include <list>
 #include <XnCppWrapper.h>
 #include <XnVPointControl.h>
+#include "SerialWrite.h"
+#include <pthread.h>
 
 typedef enum
 {
@@ -21,6 +23,7 @@ typedef enum
 } SessionState;
 
 void PrintSessionState(SessionState eState);
+
 /**
  * This is a point control, which stores the history of every point
  * It can draw all the points as well as the depth map.
@@ -28,7 +31,8 @@ void PrintSessionState(SessionState eState);
 class XnVPointDrawer : public XnVPointControl
 {
 public:
-	XnVPointDrawer(XnUInt32 nHistorySize, xn::DepthGenerator depthGenerator);
+	//XnVPointDrawer(FT_HANDLE ft_handle, XnUInt32 nHistorySize, xn::DepthGenerator depthGenerator);
+	XnVPointDrawer(int fd, XnUInt32 nHistorySize, xn::DepthGenerator depthGenerator);
 	virtual ~XnVPointDrawer();
 
 	/**
@@ -78,6 +82,9 @@ protected:
 
 	XnBool m_bDrawDM;
 	XnBool m_bFrameID;
+
+  //FT_HANDLE ft_handle;
+  int fd;
 };
 
 #endif

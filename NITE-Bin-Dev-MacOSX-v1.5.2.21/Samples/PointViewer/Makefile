@@ -3,7 +3,8 @@ OSTYPE := $(shell uname -s)
 SRC_FILES = \
 	main.cpp \
 	PointDrawer.cpp \
-	signal_catch.cpp
+	signal_catch.cpp \
+	SerialWrite.cpp
 
 INC_DIRS += ../../../../../Samples/PointViewer
 
@@ -19,7 +20,7 @@ else
 DEFINES += USE_GLUT
 
 ifeq ("$(OSTYPE)","Darwin")
-        LDFLAGS += -framework OpenGL -framework GLUT
+        LDFLAGS += -pthread -framework CoreFoundation -framework IOKit -framework OpenGL -framework GLUT
 else
         USED_LIBS += glut
 endif

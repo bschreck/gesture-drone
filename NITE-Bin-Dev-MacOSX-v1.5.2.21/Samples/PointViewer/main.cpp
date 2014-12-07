@@ -15,6 +15,7 @@
 #include "XnVNite.h"
 // local header
 #include "PointDrawer.h"
+#include "SerialWrite.h"
 
 #define CHECK_RC(rc, what)											\
 	if (rc != XN_STATUS_OK)											\
@@ -63,6 +64,7 @@ XnVFlowRouter* g_pFlowRouter;
 
 // the drawer
 XnVPointDrawer* g_pDrawer;
+
 
 #define GL_WIN_SIZE_X 720
 #define GL_WIN_SIZE_Y 480
@@ -235,7 +237,6 @@ void glInit (int * pargc, char ** argv)
 void XN_CALLBACK_TYPE GestureIntermediateStageCompletedHandler(xn::GestureGenerator& generator, const XnChar* strGesture, const XnPoint3D* pPosition, void* pCookie)
 {
 	printf("Gesture %s: Intermediate stage complete (%f,%f,%f)\n", strGesture, pPosition->X, pPosition->Y, pPosition->Z);
-  printf("IFSHITSHITSHIT");
 }
 void XN_CALLBACK_TYPE GestureReadyForNextIntermediateStageHandler(xn::GestureGenerator& generator, const XnChar* strGesture, const XnPoint3D* pPosition, void* pCookie)
 {
@@ -252,77 +253,86 @@ void XN_CALLBACK_TYPE GestureProgressHandler(xn::GestureGenerator& generator, co
 
 int main(int argc, char ** argv)
 {
-	XnStatus rc = XN_STATUS_OK;
-	xn::EnumerationErrors errors;
 
-	// Initialize OpenNI
-	rc = g_Context.InitFromXmlFile(SAMPLE_XML_PATH, g_ScriptNode, &errors);
-	CHECK_ERRORS(rc, errors, "InitFromXmlFile");
-	CHECK_RC(rc, "InitFromXmlFile");
+   XnStatus rc = XN_STATUS_OK;
+   xn::EnumerationErrors errors;
 
-	rc = g_Context.FindExistingNode(XN_NODE_TYPE_DEPTH, g_DepthGenerator);
-	CHECK_RC(rc, "Find depth generator");
-	rc = g_Context.FindExistingNode(XN_NODE_TYPE_HANDS, g_HandsGenerator);
-	CHECK_RC(rc, "Find hands generator");
-	rc = g_Context.FindExistingNode(XN_NODE_TYPE_GESTURE, g_GestureGenerator);
-	CHECK_RC(rc, "Find gesture generator");
+   // Initialize OpenNI
+   rc = g_Context.InitFromXmlFile(SAMPLE_XML_PATH, g_ScriptNode, &errors);
+   CHECK_ERRORS(rc, errors, "InitFromXmlFile");
+   CHECK_RC(rc, "InitFromXmlFile");
 
-	XnCallbackHandle h;
-	if (g_HandsGenerator.IsCapabilitySupported(XN_CAPABILITY_HAND_TOUCHING_FOV_EDGE))
-	{
-		g_HandsGenerator.GetHandTouchingFOVEdgeCap().RegisterToHandTouchingFOVEdge(TouchingCallback, NULL, h);
-	}
+   rc = g_Context.FindExistingNode(XN_NODE_TYPE_DEPTH, g_DepthGenerator);
+   CHECK_RC(rc, "Find depth generator");
+   rc = g_Context.FindExistingNode(XN_NODE_TYPE_HANDS, g_HandsGenerator);
+   CHECK_RC(rc, "Find hands generator");
+   rc = g_Context.FindExistingNode(XN_NODE_TYPE_GESTURE, g_GestureGenerator);
+   CHECK_RC(rc, "Find gesture generator");
 
-	XnCallbackHandle hGestureIntermediateStageCompleted, hGestureProgress, hGestureReadyForNextIntermediateStage;
-	g_GestureGenerator.RegisterToGestureIntermediateStageCompleted(GestureIntermediateStageCompletedHandler, NULL, hGestureIntermediateStageCompleted);
-	g_GestureGenerator.RegisterToGestureReadyForNextIntermediateStage(GestureReadyForNextIntermediateStageHandler, NULL, hGestureReadyForNextIntermediateStage);
-	g_GestureGenerator.RegisterGestureCallbacks(NULL, GestureProgressHandler, NULL, hGestureProgress);
+   XnCallbackHandle h;
+   if (g_HandsGenerator.IsCapabilitySupported(XN_CAPABILITY_HAND_TOUCHING_FOV_EDGE))
+   {
+     g_HandsGenerator.GetHandTouchingFOVEdgeCap().RegisterToHandTouchingFOVEdge(TouchingCallback, NULL, h);
+   }
+
+   XnCallbackHandle hGestureIntermediateStageCompleted, hGestureProgress, hGestureReadyForNextIntermediateStage;
+   g_GestureGenerator.RegisterToGestureIntermediateStageCompleted(GestureIntermediateStageCompletedHandler, NULL, hGestureIntermediateStageCompleted);
+   g_GestureGenerator.RegisterToGestureReadyForNextIntermediateStage(GestureReadyForNextIntermediateStageHandler, NULL, hGestureReadyForNextIntermediateStage);
+   g_GestureGenerator.RegisterGestureCallbacks(NULL, GestureProgressHandler, NULL, hGestureProgress);
 
 
-	// Create NITE objects
-	g_pSessionManager = new XnVSessionManager;
-	rc = g_pSessionManager->Initialize(&g_Context, "Click,Wave", "RaiseHand");
-	CHECK_RC(rc, "SessionManager::Initialize");
+   // Create NITE objects
+   g_pSessionManager = new XnVSessionManager;
+   rc = g_pSessionManager->Initialize(&g_Context, "Click,Wave", "RaiseHand");
+   CHECK_RC(rc, "SessionManager::Initialize");
 
-	g_pSessionManager->RegisterSession(NULL, SessionStarting, SessionEnding, FocusProgress);
+   g_pSessionManager->RegisterSession(NULL, SessionStarting, SessionEnding, FocusProgress);
 
-	g_pDrawer = new XnVPointDrawer(20, g_DepthGenerator);
-	g_pFlowRouter = new XnVFlowRouter;
-	g_pFlowRouter->SetActive(g_pDrawer);
 
-	g_pSessionManager->AddListener(g_pFlowRouter);
 
-	g_pDrawer->RegisterNoPoints(NULL, NoHands);
-	g_pDrawer->SetDepthMap(g_bDrawDepthMap);
+   char portname[] = "/dev/cu.usbserial-DPE0AJZN";
+   int fd = initializeSerialPort(portname);
 
-	// Initialization done. Start generating
-	rc = g_Context.StartGeneratingAll();
-	CHECK_RC(rc, "StartGenerating");
 
-	// Mainloop
-#ifdef USE_GLUT
 
-	glInit(&argc, argv);
-	glutMainLoop();
+   g_pDrawer = new XnVPointDrawer(fd, 20, g_DepthGenerator);
+   g_pFlowRouter = new XnVFlowRouter;
+   g_pFlowRouter->SetActive(g_pDrawer);
 
-#elif defined(USE_GLES)
-	if (!opengles_init(GL_WIN_SIZE_X, GL_WIN_SIZE_Y, &display, &surface, &context))
-	{
-		printf("Error initializing opengles\n");
-		CleanupExit();
-	}
-	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_TEXTURE_2D);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
+   g_pSessionManager->AddListener(g_pFlowRouter);
 
-	while ((!_kbhit()) && (!g_bQuit))
-	{
-		glutDisplay();
-		eglSwapBuffers(display, surface);
-	}
-	opengles_shutdown(display, surface, context);
+   g_pDrawer->RegisterNoPoints(NULL, NoHands);
+   g_pDrawer->SetDepthMap(g_bDrawDepthMap);
 
-	CleanupExit();
-#endif
+   // Initialization done. Start generating
+   rc = g_Context.StartGeneratingAll();
+   CHECK_RC(rc, "StartGenerating");
+
+   // Mainloop
+ #ifdef USE_GLUT
+
+   glInit(&argc, argv);
+   glutMainLoop();
+
+ #elif defined(USE_GLES)
+   if (!opengles_init(GL_WIN_SIZE_X, GL_WIN_SIZE_Y, &display, &surface, &context))
+   {
+     printf("Error initializing opengles\n");
+     CleanupExit();
+   }
+   glDisable(GL_DEPTH_TEST);
+   glEnable(GL_TEXTURE_2D);
+   glEnableClientState(GL_VERTEX_ARRAY);
+   glDisableClientState(GL_COLOR_ARRAY);
+
+   while ((!_kbhit()) && (!g_bQuit))
+   {
+     glutDisplay();
+     eglSwapBuffers(display, surface);
+   }
+   opengles_shutdown(display, surface, context);
+
+   CleanupExit();
+ #endif
+
 }

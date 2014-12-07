@@ -29,3 +29,24 @@ OpenGL -framework GLUT -arch x86_64  -L../Bin/x64-Release
 OpenNI is automatically installed in /usr/lib, and for some reason it's
 not recognized by the linker when it's in there, so you have to copy
 /usr/lib/libOpenNI.dylib to /usr/local/lib/libOpenNI.dylib, and run make
+
+
+
+
+
+Installing FTDI Drivers:
+http://www.ftdichip.com/Support/Documents/InstallGuides.htm
+
+download both dmgs, install the first, and follow the instructions to
+install the second here:
+
+http://www.ftdichip.com/Support/Documents/AppNotes/AN_134_FTDI_Drivers_Installation_Guide_for_MAC_OSX.pdf
+
+Then to include FTDI header file:
+
+sudo mkdir /usr/include/ftdi
+sudo cp ftd2xx.h /usr/include/ftdi
+sudo cp WinTypes.h /usr/include/ftdi
+
+programming guide:
+http://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide(FT_000071).pdf

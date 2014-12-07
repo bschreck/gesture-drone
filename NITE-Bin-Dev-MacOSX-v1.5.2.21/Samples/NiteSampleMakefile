@@ -13,10 +13,10 @@
 # LDFLAGS - [Optional] additional flags for the linker
 #############################################################################
 
-INC_DIRS += ../../Include =/usr/include/ni ../../Source/XnCommon =/usr/include/ni
+INC_DIRS += ../../Include =/usr/include/ni ../../Source/XnCommon =/usr/include/ni# /usr/include/ftdi
 BIN_DIR = ../Bin
 
-USED_LIBS += OpenNI XnVNite_1_5_2
+USED_LIBS += OpenNI XnVNite_1_5_2# ftd2xx.1.2.2
 
 LIB_DIRS += /usr/local/lib
 

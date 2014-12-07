@@ -21,9 +21,9 @@
 
 // Constructor. Receives the number of previous positions to store per hand,
 // and a source for depth map
-XnVPointDrawer::XnVPointDrawer(XnUInt32 nHistory, xn::DepthGenerator depthGenerator) :
+XnVPointDrawer::XnVPointDrawer(int fd, XnUInt32 nHistory, xn::DepthGenerator depthGenerator) :
 	XnVPointControl("XnVPointDrawer"),
-	m_nHistorySize(nHistory), m_DepthGenerator(depthGenerator), m_bDrawDM(false), m_bFrameID(false)
+	fd(fd), m_nHistorySize(nHistory), m_DepthGenerator(depthGenerator), m_bDrawDM(false), m_bFrameID(false)
 {
 	m_pfPositionBuffer = new XnFloat[nHistory*3];
 }
@@ -63,18 +63,36 @@ void XnVPointDrawer::OnPointCreate(const XnVHandPointContext* cxt)
 	OnPointUpdate(cxt);
 	bShouldPrint = true;
 }
+
+char out_coords[sizeof(SerialHandCoordinates)*HAND_COORD_BUF_SIZE];
+int out_coords_index = 0;
+
 // Handle new position of an existing hand
 void XnVPointDrawer::OnPointUpdate(const XnVHandPointContext* cxt)
 {
 	// positions are kept in projective coordinates, since they are only used for drawing
 	XnPoint3D ptProjective(cxt->ptPosition);
 
+
+
+
+
 //	if (bShouldPrint){
-    printf("Point (%d,%d,%d)", int(ptProjective.X), int(ptProjective.Y), int(ptProjective.Z));
-    printf("THIS should print");
+
 //  }
 	m_DepthGenerator.ConvertRealWorldToProjective(1, &ptProjective, &ptProjective);
-	if (bShouldPrint)printf(" -> (%f,%f,%f)\n", ptProjective.X, ptProjective.Y, ptProjective.Z);
+
+
+
+
+
+
+
+
+  //printf("Point (%d,%d,%d)\n", int(ptProjective.X), int(ptProjective.Y), int(ptProjective.Z));
+	//if (bShouldPrint)printf(" -> (%f,%f,%f)\n", ptProjective.X, ptProjective.Y, ptProjective.Z);
+
+
 
 	// Add new position to the history buffer
 	m_History[cxt->nID].push_front(ptProjective);
@@ -82,6 +100,53 @@ void XnVPointDrawer::OnPointUpdate(const XnVHandPointContext* cxt)
 	if (m_History[cxt->nID].size() > m_nHistorySize)
 		m_History[cxt->nID].pop_back();
 	bShouldPrint = false;
+
+
+
+  std::map<XnUInt32, std::list<XnPoint3D> >::const_iterator PointIterator;
+  std::list<XnPoint3D>::const_iterator PositionIterator;
+
+  // Find first 2 hands
+  // first hand
+  PointIterator = m_History.begin();
+  PositionIterator = PointIterator->second.begin();
+  XnPoint3D ptl(*PositionIterator);
+  HandCoordinates hand;
+  hand.left_x= int(ptl.X);
+  hand.left_y=int(ptl.Y);
+  hand.left_z=int(ptl.Z);
+  //printf("Hand 1, Point (%d,%d,%d)\n", int(ptl.X), int(ptl.Y), int(ptl.Z));
+
+   //second hand
+  if (++PointIterator != m_History.end()) {
+    PositionIterator = PointIterator->second.begin();
+    XnPoint3D ptr(*PositionIterator);
+    hand.right_x= int(ptr.X);
+    hand.right_y=int(ptr.Y);
+    hand.right_z=int(ptr.Z);
+    //printf("Hand 2, Point (%d,%d,%d)\n", int(ptr.X), int(ptr.Y), int(ptr.Z));
+  } else {
+    hand.right_x= 0;
+    hand.right_y= 0;
+    hand.right_z= 0;
+    //printf("No Hand 2\n");
+  }
+  serialize(&hand, ((char*)&out_coords)+out_coords_index);
+    //printf("q[0] = %d", out_coords[0]);
+    //printf("q[1] = %d", out_coords[1]);
+    //printf("q[2] = %d", out_coords[2]);
+    //printf("q[3] = %d", out_coords[3]);
+    //printf("q[4] = %d", out_coords[4]);
+  out_coords_index += sizeof(SerialHandCoordinates);
+  if (out_coords_index == sizeof(SerialHandCoordinates)*HAND_COORD_BUF_SIZE) {
+    //int n = writeToSerialPort(ft_handle, out_coords);
+    int n = write (fd, out_coords, sizeof(out_coords));
+    if (n < 0)
+      fputs("write() of hand coords failed!\n", stderr);
+
+    out_coords_index = 0;
+  }
+
 }
 
 // Handle destruction of an existing hand
