@@ -1,0 +1,630 @@
+Release 10.1.03 - xst K.39 (lin64)
+Copyright (c) 1995-2008 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to /afs/athena.mit.edu/user/l/e/leegross/Documents/6.111/FINAL/FINAL/xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.05 secs
+ 
+--> 
+Parameter xsthdpdir set to /afs/athena.mit.edu/user/l/e/leegross/Documents/6.111/FINAL/FINAL/xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.05 secs
+ 
+--> 
+Reading design: gest_rec.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+     9.1) Device utilization summary
+     9.2) Partition Resource Summary
+     9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "gest_rec.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "gest_rec"
+Output Format                      : NGC
+Target Device                      : xc2v6000-4-bf957
+
+---- Source Options
+Top Module Name                    : gest_rec
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : lut
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Mux Style                          : Auto
+Decoder Extraction                 : YES
+Priority Encoder Extraction        : YES
+Shift Register Extraction          : YES
+Logical Shifter Extraction         : YES
+XOR Collapsing                     : YES
+ROM Style                          : Auto
+Mux Extraction                     : YES
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Multiplier Style                   : auto
+Automatic Register Balancing       : No
+
+---- Target Options
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 500
+Add Generic Clock Buffer(BUFG)     : 16
+Register Duplication               : YES
+Slice Packing                      : YES
+Optimize Instantiated Primitives   : NO
+Convert Tristates To Logic         : Yes
+Use Clock Enable                   : Yes
+Use Synchronous Set                : Yes
+Use Synchronous Reset              : Yes
+Pack IO Registers into IOBs        : auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Library Search Order               : gest_rec.lso
+Keep Hierarchy                     : NO
+Netlist Hierarchy                  : as_optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+Verilog 2001                       : YES
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling verilog file "../sources/Roll.v" in library work
+Compiling verilog file "../sources/on_off_state.v" in library work
+Module <Roll> compiled
+Compiling verilog file "../sources/On_FSM.v" in library work
+Module <on_off_state> compiled
+Compiling verilog file "../sources/Off_FSM.v" in library work
+Module <On_FSM> compiled
+Compiling verilog file "../sources/Hover.v" in library work
+Module <Off_FSM> compiled
+Compiling verilog file "../sources/Gest_Rec.v" in library work
+Module <Hover> compiled
+Module <gest_rec> compiled
+No errors in compilation
+Analysis of file <"gest_rec.prj"> succeeded.
+ 
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for module <gest_rec> in library <work> with parameters.
+	H = "00000000000000000000000000000100"
+	MAX_X = "00000000000000000000000000001001"
+	MAX_Y = "00000000000000000000000000001001"
+	MAX_Z = "00000000000000000000000000001001"
+	NO_ROLL = "00"
+	P = "00000000000000000000000000000100"
+	R = "00000000000000000000000000000100"
+	ROLL_LEFT = "01"
+	ROLL_RIGHT = "10"
+
+Analyzing hierarchy for module <Off_FSM> in library <work> with parameters.
+	IDLE = "0000"
+	MAX_X = "00000000000000000000000000001001"
+	MAX_Y = "00000000000000000000000000001001"
+	STEP0 = "0001"
+	STEP1 = "0010"
+	STEP2 = "0011"
+	STEP3 = "0100"
+	STEP4 = "0101"
+	boundry = "00000000000000000000000000000110"
+	line0 = "00000000000000000000000000000000"
+	line1 = "00000000000000000000000000000001"
+	line2 = "00000000000000000000000000000011"
+	line3 = "00000000000000000000000000000101"
+	line4 = "00000000000000000000000000000111"
+	line5 = "00000000000000000000000000001001"
+
+Analyzing hierarchy for module <On_FSM> in library <work> with parameters.
+	IDLE = "0000"
+	MAX_X = "00000000000000000000000000001001"
+	MAX_Y = "00000000000000000000000000001001"
+	STATE0 = "0001"
+	STATE1 = "0010"
+	STATE2 = "0011"
+	STATE3 = "0100"
+	STATE4 = "0101"
+	STATE5 = "0110"
+	STATE6 = "0111"
+	STATE7 = "1000"
+	TURN_ON = "1001"
+	hline0 = "00000000000000000000000000000000"
+	hline1 = "00000000000000000000000000000011"
+	hline2 = "00000000000000000000000000000110"
+	hline3 = "00000000000000000000000000001001"
+	vline0 = "00000000000000000000000000000000"
+	vline1 = "00000000000000000000000000000011"
+	vline2 = "00000000000000000000000000000110"
+	vline3 = "00000000000000000000000000001001"
+
+Analyzing hierarchy for module <on_off_state> in library <work> with parameters.
+	OFF = "0"
+	ON = "1"
+
+Analyzing hierarchy for module <Hover> in library <work> with parameters.
+	MAX_X = "00000000000000000000000000001001"
+	MAX_Y = "00000000000000000000000000001001"
+	NUM_BUCKETS = "00000000000000000000000000000100"
+	W = "00000000000000000000000000000100"
+
+Analyzing hierarchy for module <Roll> in library <work> with parameters.
+	LEFT = "01"
+	MAX_X = "00000000000000000000000000001001"
+	MAX_Y = "00000000000000000000000000001001"
+	NO_ROLL = "00"
+	NUM_BUCKETS = "00000000000000000000000000000100"
+	RIGHT = "10"
+	W = "00000000000000000000000000000100"
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing top module <gest_rec>.
+	H = 32'sb00000000000000000000000000000100
+	MAX_X = 32'sb00000000000000000000000000001001
+	MAX_Y = 32'sb00000000000000000000000000001001
+	MAX_Z = 32'sb00000000000000000000000000001001
+	NO_ROLL = 2'b00
+	P = 32'sb00000000000000000000000000000100
+	R = 32'sb00000000000000000000000000000100
+	ROLL_LEFT = 2'b01
+	ROLL_RIGHT = 2'b10
+Module <gest_rec> is correct for synthesis.
+ 
+Analyzing module <Off_FSM> in library <work>.
+	IDLE = 4'b0000
+	MAX_X = 32'sb00000000000000000000000000001001
+	MAX_Y = 32'sb00000000000000000000000000001001
+	STEP0 = 4'b0001
+	STEP1 = 4'b0010
+	STEP2 = 4'b0011
+	STEP3 = 4'b0100
+	STEP4 = 4'b0101
+	boundry = 32'sb00000000000000000000000000000110
+	line0 = 32'sb00000000000000000000000000000000
+	line1 = 32'sb00000000000000000000000000000001
+	line2 = 32'sb00000000000000000000000000000011
+	line3 = 32'sb00000000000000000000000000000101
+	line4 = 32'sb00000000000000000000000000000111
+	line5 = 32'sb00000000000000000000000000001001
+WARNING:Xst:2725 - "../sources/Off_FSM.v" line 68: Size mismatch between case item and case selector.
+WARNING:Xst:2725 - "../sources/Off_FSM.v" line 73: Size mismatch between case item and case selector.
+WARNING:Xst:2725 - "../sources/Off_FSM.v" line 79: Size mismatch between case item and case selector.
+WARNING:Xst:2725 - "../sources/Off_FSM.v" line 85: Size mismatch between case item and case selector.
+WARNING:Xst:2725 - "../sources/Off_FSM.v" line 91: Size mismatch between case item and case selector.
+WARNING:Xst:2725 - "../sources/Off_FSM.v" line 101: Size mismatch between case item and case selector.
+WARNING:Xst:2725 - "../sources/Off_FSM.v" line 106: Size mismatch between case item and case selector.
+WARNING:Xst:2725 - "../sources/Off_FSM.v" line 112: Size mismatch between case item and case selector.
+WARNING:Xst:2725 - "../sources/Off_FSM.v" line 118: Size mismatch between case item and case selector.
+WARNING:Xst:2725 - "../sources/Off_FSM.v" line 124: Size mismatch between case item and case selector.
+Module <Off_FSM> is correct for synthesis.
+ 
+Analyzing module <On_FSM> in library <work>.
+	IDLE = 4'b0000
+	MAX_X = 32'sb00000000000000000000000000001001
+	MAX_Y = 32'sb00000000000000000000000000001001
+	STATE0 = 4'b0001
+	STATE1 = 4'b0010
+	STATE2 = 4'b0011
+	STATE3 = 4'b0100
+	STATE4 = 4'b0101
+	STATE5 = 4'b0110
+	STATE6 = 4'b0111
+	STATE7 = 4'b1000
+	TURN_ON = 4'b1001
+	hline0 = 32'sb00000000000000000000000000000000
+	hline1 = 32'sb00000000000000000000000000000011
+	hline2 = 32'sb00000000000000000000000000000110
+	hline3 = 32'sb00000000000000000000000000001001
+	vline0 = 32'sb00000000000000000000000000000000
+	vline1 = 32'sb00000000000000000000000000000011
+	vline2 = 32'sb00000000000000000000000000000110
+	vline3 = 32'sb00000000000000000000000000001001
+Module <On_FSM> is correct for synthesis.
+ 
+Analyzing module <on_off_state> in library <work>.
+	OFF = 1'b0
+	ON = 1'b1
+Module <on_off_state> is correct for synthesis.
+ 
+Analyzing module <Hover> in library <work>.
+	MAX_X = 32'sb00000000000000000000000000001001
+	MAX_Y = 32'sb00000000000000000000000000001001
+	NUM_BUCKETS = 32'sb00000000000000000000000000000100
+	W = 32'sb00000000000000000000000000000100
+Module <Hover> is correct for synthesis.
+ 
+Analyzing module <Roll> in library <work>.
+	LEFT = 2'b01
+	MAX_X = 32'sb00000000000000000000000000001001
+	MAX_Y = 32'sb00000000000000000000000000001001
+	NO_ROLL = 2'b00
+	NUM_BUCKETS = 32'sb00000000000000000000000000000100
+	RIGHT = 2'b10
+	W = 32'sb00000000000000000000000000000100
+Module <Roll> is correct for synthesis.
+ 
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <Off_FSM>.
+    Related source file is "../sources/Off_FSM.v".
+    Found finite state machine <FSM_0> for signal <state_left>.
+    -----------------------------------------------------------------------
+    | States             | 6                                              |
+    | Transitions        | 46                                             |
+    | Inputs             | 9                                              |
+    | Outputs            | 3                                              |
+    | Clock              | clock (rising_edge)                            |
+    | Clock enable       | state_left$not0000 (positive)                  |
+    | Reset              | reset (positive)                               |
+    | Reset type         | synchronous                                    |
+    | Reset State        | 00000                                          |
+    | Power Up State     | 00000                                          |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found finite state machine <FSM_1> for signal <state_right>.
+    -----------------------------------------------------------------------
+    | States             | 6                                              |
+    | Transitions        | 46                                             |
+    | Inputs             | 9                                              |
+    | Outputs            | 6                                              |
+    | Clock              | clock (rising_edge)                            |
+    | Clock enable       | state_left$not0000 (positive)                  |
+    | Reset              | reset (positive)                               |
+    | Reset type         | synchronous                                    |
+    | Reset State        | 00000                                          |
+    | Power Up State     | 00000                                          |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <is_off>.
+    Found 16-bit comparator lessequal for signal <is_off$cmp_le0000> created at line 66.
+    Found 16-bit comparator lessequal for signal <is_off$cmp_le0001> created at line 66.
+    Found 16-bit comparator greater for signal <state_left$cmp_gt0000> created at line 66.
+    Found 16-bit comparator greater for signal <state_left$cmp_gt0001> created at line 66.
+    Found 16-bit comparator greater for signal <state_left$cmp_gt0002> created at line 70.
+    Found 16-bit comparator greater for signal <state_left$cmp_gt0003> created at line 76.
+    Found 17-bit comparator greater for signal <state_left$cmp_gt0004> created at line 82.
+    Found 16-bit comparator less for signal <state_left$cmp_lt0000> created at line 70.
+    Found 16-bit comparator less for signal <state_left$cmp_lt0001> created at line 76.
+    Found 16-bit comparator less for signal <state_left$cmp_lt0002> created at line 82.
+    Found 16-bit comparator greater for signal <state_right$cmp_gt0000> created at line 103.
+    Found 16-bit comparator greater for signal <state_right$cmp_gt0001> created at line 109.
+    Found 16-bit comparator greater for signal <state_right$cmp_gt0002> created at line 115.
+    Found 16-bit comparator less for signal <state_right$cmp_lt0000> created at line 103.
+    Found 16-bit comparator less for signal <state_right$cmp_lt0001> created at line 109.
+    Found 16-bit comparator less for signal <state_right$cmp_lt0002> created at line 115.
+    Summary:
+	inferred   2 Finite State Machine(s).
+	inferred   1 D-type flip-flop(s).
+	inferred  16 Comparator(s).
+Unit <Off_FSM> synthesized.
+
+
+Synthesizing Unit <On_FSM>.
+    Related source file is "../sources/On_FSM.v".
+    Found finite state machine <FSM_2> for signal <state>.
+    -----------------------------------------------------------------------
+    | States             | 10                                             |
+    | Transitions        | 78                                             |
+    | Inputs             | 12                                             |
+    | Outputs            | 2                                              |
+    | Clock              | clock (rising_edge)                            |
+    | Reset              | reset (positive)                               |
+    | Reset type         | synchronous                                    |
+    | Reset State        | 0000                                           |
+    | Power Up State     | 0000                                           |
+    | Encoding           | automatic                                      |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <is_on>.
+    Found 16-bit comparator greater for signal <state$cmp_gt0000> created at line 64.
+    Found 16-bit comparator greater for signal <state$cmp_gt0001> created at line 64.
+    Found 17-bit comparator greater for signal <state$cmp_gt0002> created at line 71.
+    Found 16-bit comparator greater for signal <state$cmp_gt0003> created at line 78.
+    Found 17-bit comparator greater for signal <state$cmp_gt0004> created at line 85.
+    Found 16-bit comparator greater for signal <state$cmp_gt0005> created at line 99.
+    Found 16-bit comparator less for signal <state$cmp_lt0000> created at line 64.
+    Found 16-bit comparator less for signal <state$cmp_lt0001> created at line 64.
+    Found 16-bit comparator less for signal <state$cmp_lt0002> created at line 71.
+    Found 16-bit comparator less for signal <state$cmp_lt0003> created at line 78.
+    Found 16-bit comparator less for signal <state$cmp_lt0004> created at line 85.
+    Found 16-bit comparator less for signal <state$cmp_lt0005> created at line 99.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 D-type flip-flop(s).
+	inferred  12 Comparator(s).
+Unit <On_FSM> synthesized.
+
+
+Synthesizing Unit <on_off_state>.
+    Related source file is "../sources/on_off_state.v".
+    Found 1-bit register for signal <on_off_s>.
+    Summary:
+	inferred   1 D-type flip-flop(s).
+Unit <on_off_state> synthesized.
+
+
+Synthesizing Unit <Hover>.
+    Related source file is "../sources/Hover.v".
+WARNING:Xst:647 - Input <y1<15:12>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <y2<15:12>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:646 - Signal <y_sum<0>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 4-bit register for signal <hover>.
+    Found 11-bit comparator greatequal for signal <hover$cmp_ge0000> created at line 45.
+    Found 11-bit comparator greatequal for signal <hover$cmp_ge0001> created at line 44.
+    Found 11-bit comparator greatequal for signal <hover$cmp_ge0002> created at line 45.
+    Found 11-bit comparator greatequal for signal <hover$cmp_ge0003> created at line 45.
+    Found 11-bit comparator lessequal for signal <hover$cmp_le0000> created at line 45.
+    Found 11-bit comparator lessequal for signal <hover$cmp_le0001> created at line 45.
+    Found 11-bit comparator lessequal for signal <hover$cmp_le0002> created at line 45.
+    Found 12-bit adder for signal <y_sum>.
+    Summary:
+	inferred  16 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   7 Comparator(s).
+Unit <Hover> synthesized.
+
+
+Synthesizing Unit <Roll>.
+    Related source file is "../sources/Roll.v".
+    Found 4-bit register for signal <roll_mag>.
+    Found 16-bit comparator greater for signal <direction$cmp_gt0000> created at line 44.
+    Found 12-bit comparator less for signal <direction$cmp_lt0000> created at line 44.
+    Found 12-bit comparator greatequal for signal <roll_mag$cmp_ge0000> created at line 52.
+    Found 12-bit comparator greatequal for signal <roll_mag$cmp_ge0001> created at line 51.
+    Found 12-bit comparator greatequal for signal <roll_mag$cmp_ge0002> created at line 52.
+    Found 12-bit comparator greatequal for signal <roll_mag$cmp_ge0003> created at line 52.
+    Found 12-bit comparator lessequal for signal <roll_mag$cmp_le0000> created at line 52.
+    Found 12-bit comparator lessequal for signal <roll_mag$cmp_le0001> created at line 52.
+    Found 12-bit comparator lessequal for signal <roll_mag$cmp_le0002> created at line 52.
+    Found 12-bit subtractor for signal <y>.
+    Summary:
+	inferred  16 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   9 Comparator(s).
+Unit <Roll> synthesized.
+
+
+Synthesizing Unit <gest_rec>.
+    Related source file is "../sources/Gest_Rec.v".
+WARNING:Xst:1306 - Output <pitch> is never assigned.
+WARNING:Xst:647 - Input <z1> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <z2> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+Unit <gest_rec> synthesized.
+
+INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmetic operations in this design can share the same physical resources for reduced device utilization. For improved clock frequency you may try to disable resource sharing.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Adders/Subtractors                                   : 2
+ 12-bit adder                                          : 1
+ 12-bit subtractor                                     : 1
+# Registers                                            : 12
+ 1-bit register                                        : 4
+ 4-bit register                                        : 8
+# Comparators                                          : 56
+ 11-bit comparator greatequal                          : 4
+ 11-bit comparator lessequal                           : 3
+ 12-bit comparator greatequal                          : 4
+ 12-bit comparator less                                : 1
+ 12-bit comparator lessequal                           : 3
+ 16-bit comparator greater                             : 16
+ 16-bit comparator less                                : 18
+ 16-bit comparator lessequal                           : 2
+ 17-bit comparator greater                             : 5
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_2> for best encoding.
+Optimizing FSM <on1/state/FSM> on signal <state[1:4]> with sequential encoding.
+Optimizing FSM <on2/state/FSM> on signal <state[1:4]> with sequential encoding.
+-------------------
+ State | Encoding
+-------------------
+ 0000  | 0000
+ 0001  | 0001
+ 0010  | 0010
+ 0011  | 0011
+ 0100  | 0100
+ 0101  | 0101
+ 0110  | 0110
+ 0111  | 0111
+ 1000  | 1000
+ 1001  | 1001
+-------------------
+Analyzing FSM <FSM_1> for best encoding.
+Optimizing FSM <off/state_right/FSM> on signal <state_right[1:3]> with sequential encoding.
+-------------------
+ State | Encoding
+-------------------
+ 00000 | 000
+ 00001 | 001
+ 00010 | 010
+ 00011 | 011
+ 00100 | 100
+ 00101 | 101
+-------------------
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <off/state_left/FSM> on signal <state_left[1:3]> with sequential encoding.
+-------------------
+ State | Encoding
+-------------------
+ 00000 | 000
+ 00001 | 001
+ 00010 | 010
+ 00011 | 011
+ 00100 | 100
+ 00101 | 101
+-------------------
+Loading device for application Rf_Device from file '2v6000.nph' in environment /afs/csail.mit.edu/proj/redsocs/Xilinx10.1/ISE.
+WARNING:Xst:1710 - FF/Latch <hover_ren_1_0> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <hover_ren_1_2> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <hover_ren_1_3> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <hover_ren_21> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <hover_ren_3> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <hover_0> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <hover_1> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <hover_3> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <hover_ren_2_1> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <hover_ren_2_2> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <hover_ren_2_3> (without init value) has a constant value of 0 in block <Hover>. This FF/Latch will be trimmed during the optimization process.
+INFO:Xst:2261 - The FF/Latch <hover_ren_0> in Unit <Hover> is equivalent to the following FF/Latch, which will be removed : <hover_ren_1> 
+WARNING:Xst:1710 - FF/Latch <roll_mag_ren_21> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <roll_mag_ren_3> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <roll_mag_ren_1_0> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <roll_mag_ren_1_2> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <roll_mag_ren_1_3> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <roll_mag_0> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <roll_mag_1> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <roll_mag_3> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <roll_mag_ren_2_1> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <roll_mag_ren_2_2> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <roll_mag_ren_2_3> (without init value) has a constant value of 0 in block <Roll>. This FF/Latch will be trimmed during the optimization process.
+INFO:Xst:2261 - The FF/Latch <roll_mag_ren_0> in Unit <Roll> is equivalent to the following FF/Latch, which will be removed : <roll_mag_ren_11> 
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# Adders/Subtractors                                   : 2
+ 12-bit adder                                          : 1
+ 12-bit subtractor                                     : 1
+# Registers                                            : 26
+ Flip-Flops                                            : 26
+# Comparators                                          : 56
+ 11-bit comparator greatequal                          : 4
+ 11-bit comparator lessequal                           : 3
+ 12-bit comparator greatequal                          : 4
+ 12-bit comparator less                                : 1
+ 12-bit comparator lessequal                           : 3
+ 16-bit comparator greater                             : 16
+ 16-bit comparator less                                : 18
+ 16-bit comparator lessequal                           : 2
+ 17-bit comparator greater                             : 5
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+ERROR:Xst:528 - Multi-source in Unit <gest_rec> on signal <hover<3>>; this signal is connected to multiple drivers.
+Drivers are: 
+   Output signal of FDRE instance <h/hover_ren_0>
+   Output signal of FDRE instance <h/hover_ren_2_0>
+   Output signal of FDRE instance <h/hover_2>
+   Output signal of FDRE instance <h/hover_ren_1_1>
+   Signal <h/N0> in Unit <Hover> is assigned to GND
+   Signal <hover<3>> in Unit <gest_rec> is assigned to GND
+
+ERROR:Xst:528 - Multi-source in Unit <gest_rec> on signal <hover<2>>; this signal is connected to multiple drivers.
+Drivers are: 
+   Output signal of FDRE instance <h/hover_ren_0>
+   Output signal of FDRE instance <h/hover_ren_2_0>
+   Output signal of FDRE instance <h/hover_2>
+   Output signal of FDRE instance <h/hover_ren_1_1>
+   Signal <h/N0> in Unit <Hover> is assigned to GND
+   Signal <hover<2>> in Unit <gest_rec> is assigned to GND
+
+ERROR:Xst:528 - Multi-source in Unit <gest_rec> on signal <hover<1>>; this signal is connected to multiple drivers.
+Drivers are: 
+   Output signal of FDRE instance <h/hover_ren_0>
+   Output signal of FDRE instance <h/hover_ren_2_0>
+   Output signal of FDRE instance <h/hover_2>
+   Output signal of FDRE instance <h/hover_ren_1_1>
+   Signal <h/N0> in Unit <Hover> is assigned to GND
+   Signal <hover<1>> in Unit <gest_rec> is assigned to GND
+
+ERROR:Xst:528 - Multi-source in Unit <gest_rec> on signal <hover<0>>; this signal is connected to multiple drivers.
+Drivers are: 
+   Signal <hover_and0000> is assigned to logic
+   Output signal of FDRE instance <h/hover_ren_0>
+   Output signal of FDRE instance <h/hover_ren_2_0>
+   Output signal of FDRE instance <h/hover_2>
+   Output signal of FDRE instance <h/hover_ren_1_1>
+   Signal <h/N0> in Unit <Hover> is assigned to GND
+
+ERROR:Xst:528 - Multi-source in Unit <Hover> on signal <hover<0>>; this signal is connected to multiple drivers.
+Drivers are: 
+   Output signal of FDRE instance <h/hover_ren_0>
+   Output signal of FDRE instance <h/hover_ren_2_0>
+   Output signal of FDRE instance <h/hover_2>
+   Output signal of FDRE instance <h/hover_ren_1_1>
+   Signal <h/N0> in Unit <Hover> is assigned to GND
+
+ERROR:Xst:528 - Multi-source in Unit <Roll> on signal <roll_mag<0>>; this signal is connected to multiple drivers.
+Drivers are: 
+   Output signal of FDRE instance <r/roll_mag_ren_0>
+   Output signal of FDRE instance <r/roll_mag_ren_2_0>
+   Output signal of FDRE instance <r/roll_mag_2>
+   Output signal of FDRE instance <r/roll_mag_ren_1_1>
+   Signal <r/N0> in Unit <Roll> is assigned to GND
+
+
+Total REAL time to Xst completion: 5.00 secs
+Total CPU time to Xst completion: 3.90 secs
+ 
+--> 
+
+
+Total memory usage is 456504 kilobytes
+
+Number of errors   :    6 (   0 filtered)
+Number of warnings :   38 (   0 filtered)
+Number of infos    :    3 (   0 filtered)
+
