@@ -26,8 +26,7 @@ module Roll
     input [15:0] y1, //left hand
     input [15:0] y2, //right hand
     input reset,
-    output reg [7:0] roll_mag,
-	 output reg [1:0] direction
+    output reg [7:0] roll_mag
     );
 
 wire [16:0] y;
@@ -39,6 +38,8 @@ parameter RIGHT = 2'd2;
 
 parameter b_t = 2*MAX_Y/3; //bottom 1/3
 
+reg [1:0] direction;
+
 
 always @(*) begin
 
@@ -49,11 +50,11 @@ always @(*) begin
 
  
 	if (direction == RIGHT) begin
-		if (y< 8'd230) roll_mag <= 8'd116-(y-8'd38)/4; //proportional
+		if (y< 8'd230) roll_mag <= 8'd116-(y-8'd38)/2; //proportional
 		else roll_mag <= 8'd68; //if above threshold,set to 25 %
 	end
 	else if(direction == LEFT) begin
-		if (y< 8'd230) roll_mag <= 8'd116+(y-8'd38)/4; //proportional
+		if (y< 8'd230) roll_mag <= 8'd116+(y-8'd38)/2; //proportional
 		else roll_mag <= 8'd184; //if above threshold,set to 75 %
 	end
 	else roll_mag <= 8'd116;

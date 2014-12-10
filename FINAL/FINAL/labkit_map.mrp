@@ -11,33 +11,33 @@ Target Device  : xc2v6000
 Target Package : bf957
 Target Speed   : -4
 Mapper Version : virtex2 -- $Revision: 1.46.12.2 $
-Mapped Date    : Fri Dec  5 14:54:31 2014
+Mapped Date    : Tue Dec  9 23:26:58 2014
 
 Design Summary
 --------------
 Number of errors:      0
-Number of warnings:  310
+Number of warnings:  289
 Logic Utilization:
-  Total Number Slice Registers:         298 out of  67,584    1%
-    Number used as Flip Flops:          282
-    Number used as Latches:              16
-  Number of 4 input LUTs:             1,082 out of  67,584    1%
+  Total Number Slice Registers:         353 out of  67,584    1%
+    Number used as Flip Flops:          309
+    Number used as Latches:              44
+  Number of 4 input LUTs:             1,270 out of  67,584    1%
 Logic Distribution:
-  Number of occupied Slices:            654 out of  33,792    1%
-    Number of Slices containing only related logic:     654 out of     654 100%
-    Number of Slices containing unrelated logic:          0 out of     654   0%
+  Number of occupied Slices:            787 out of  33,792    2%
+    Number of Slices containing only related logic:     787 out of     787 100%
+    Number of Slices containing unrelated logic:          0 out of     787   0%
       *See NOTES below for an explanation of the effects of unrelated logic.
-  Total Number of 4 input LUTs:       1,131 out of  67,584    1%
-    Number used as logic:             1,078
-    Number used as a route-thru:         49
+  Total Number of 4 input LUTs:       1,361 out of  67,584    2%
+    Number used as logic:             1,266
+    Number used as a route-thru:         91
     Number used as Shift registers:       4
   Number of bonded IOBs:                576 out of     684   84%
-  Number of BUFGMUXs:                     4 out of      16   25%
+  Number of BUFGMUXs:                     5 out of      16   31%
   Number of DCMs:                         1 out of      12    8%
 
-Peak Memory Usage:  494 MB
+Peak Memory Usage:  497 MB
 Total REAL time to MAP completion:  4 secs 
-Total CPU time to MAP completion:   3 secs 
+Total CPU time to MAP completion:   4 secs 
 
 NOTES:
 
@@ -80,7 +80,7 @@ Section 1 - Errors
 Section 2 - Warnings
 --------------------
 WARNING:LIT:243 - Logical network user3<28>_IBUF has no load.
-WARNING:LIT:395 - The above warning message base_net_load_rule is repeated 306
+WARNING:LIT:395 - The above warning message base_net_load_rule is repeated 283
    more times for the following (max. 5 shown):
    user3<29>_IBUF,
    daughtercard<10>_IBUF,
@@ -91,9 +91,16 @@ WARNING:LIT:395 - The above warning message base_net_load_rule is repeated 306
 WARNING:LIT:162 - Only DFS outputs (CLKFX/FX180/CONCUR) of DCM symbol "vclk1"
    are routed, but CLKFB is not routed. Proper phase relationship of output
    clocks to CLKIN cannot be guaranteed.
+WARNING:Pack:266 - The function generator gr/h/y<8> failed to merge with F5
+   multiplexer gr/h/hover<7>_SW0_f5.  There is a conflict for the FXMUX.  The
+   design will exhibit suboptimal timing.
 WARNING:PhysDesignRules:372 - Gated clock. Clock net gr/h/y_sum_not0003 is
    sourced by a combinatorial pin. This is not good design practice. Use the CE
    pin to control the loading of data into the flip-flop.
+WARNING:PhysDesignRules:372 - Gated clock. Clock net
+   ir/Mcompar_state_cmp_gt0000_cy<9> is sourced by a combinatorial pin. This is
+   not good design practice. Use the CE pin to control the loading of data into
+   the flip-flop.
 WARNING:PhysDesignRules:367 - The signal <ram1_data<0>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <ram1_data<1>_IBUF> is incomplete. The
@@ -355,8 +362,6 @@ WARNING:PhysDesignRules:367 - The signal <flash_sts_IBUF> is incomplete. The
 WARNING:PhysDesignRules:367 - The signal <button_left_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <rs232_cts_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <button_down_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <ram0_data<10>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
@@ -628,8 +633,6 @@ WARNING:PhysDesignRules:367 - The signal <user3<18>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <user2<4>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<10>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <user1<8>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <flash_data<7>_IBUF> is incomplete. The
@@ -640,17 +643,11 @@ WARNING:PhysDesignRules:367 - The signal <user3<19>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <user2<5>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<11>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <user1<9>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <flash_data<8>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <user2<6>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<20>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<12>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <user3<28>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
@@ -658,47 +655,11 @@ WARNING:PhysDesignRules:367 - The signal <flash_data<9>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <user2<7>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<21>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<13>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <user3<29>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <user2<8>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<30>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<22>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<14>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <user2<9>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<31>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<23>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<15>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<24>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<16>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<25>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<17>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<26>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<18>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<27>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<19>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<28>_IBUF> is incomplete. The
-   signal does not drive any load pins in the design.
-WARNING:PhysDesignRules:367 - The signal <user4<29>_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
 WARNING:PhysDesignRules:367 - The signal <tv_in_hff_IBUF> is incomplete. The
    signal does not drive any load pins in the design.
@@ -1281,28 +1242,28 @@ Section 6 - IOB Properties
 | user4<7>                           | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
 | user4<8>                           | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
 | user4<9>                           | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<10>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<11>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<12>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<13>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<14>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<15>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<16>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<17>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<18>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<19>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<20>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<21>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<22>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<23>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<24>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<25>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<26>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<27>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<28>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<29>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<30>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
-| user4<31>                          | IOB              | INPUT     | LVTTL                |          |      |              |          |          |
+| user4<10>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<11>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<12>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<13>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<14>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<15>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<16>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<17>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<18>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<19>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<20>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<21>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<22>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<23>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<24>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<25>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<26>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<27>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<28>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<29>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<30>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
+| user4<31>                          | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
 | vga_out_blank_b                    | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
 | vga_out_blue<0>                    | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |
 | vga_out_blue<1>                    | IOB              | OUTPUT    | LVTTL                | 12       | SLOW |              |          |          |

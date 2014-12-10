@@ -34,8 +34,6 @@ module setHandLocations(
     );
 
 //set the left coords to equal the coords of the smaller x
-//if only 1 hand is above the dead zone(bottom 1/3 of screen), set the other
-//y value equal to the same value
 always @(*) begin
   if (x1 > x2) begin
     left_x <= x2;

@@ -287,7 +287,7 @@ module labkit (beep, audio_reset_b, ac97_sdata_out, ac97_sdata_in, ac97_synch,
    assign user1 = 32'hZ;
    assign user2 = 32'hZ;
    assign user3 = 32'hZ;
-   assign user4 = 32'hZ;
+   assign user4[31:11] = 0;
 
    // Daughtercard Connectors
    assign daughtercard = 44'hZ;
@@ -331,115 +331,83 @@ module labkit (beep, audio_reset_b, ac97_sdata_out, ac97_sdata_in, ac97_synch,
   
   wire [3:0] debug;
 	
-	wire [15:0] left_x;
-	wire [15:0] left_y;
-	wire [15:0] left_z;
-	wire [15:0] right_x;
-	wire [15:0] right_y;
-	wire [15:0] right_z;
+	wire [15:0] left_x,left_y,left_z;
+	wire [15:0] right_x,right_y,right_z;
 	wire data_ready;
 
 	wire [15:0] x1,y1,z1,x2,y2,z2;
 	wire newout;
-	
-	Bytes_to_Coords btc(	.clock(clock_27mhz),
-		 .reset(reset),
-		 .rxf(user4[9]),
-		 .rd(user4[8]),
-		 .data(user4[7:0]),
-		 .ready(data_ready),
-		 .x1(x1),
-		 .y1(y1),
-		 .z1(z1),
-		 .x2(x2),
-		 .y2(y2),
-		 .z2(z2),
-		 .newout(newout),
-		 .state(btc_state),
-		 .debug(debug));
-	setHandLocations set_hands(
-		 .x1(x1),
-		 .y1(y1),
-		 .z1(z1),
-		 .x2(x2),
-		 .y2(y2),
-		 .z2(z2),
-		 .left_x(left_x),
-		 .left_y(left_y),
-		 .left_z(left_z),
-		 .right_x(right_x),
-		 .right_y(right_y),
-		 .right_z(right_z)
-		 );
 
-
-   assign led = {7'b1111111, !on};
+	wire initialize_debug;
+   assign led = {6'b111111,!initialize_debug, !on};
 	
-	wire [1:0] roll_direction;				
-   wire [4:0] off_state;
-	display_16hex hex(.reset(reset), .clock_27mhz(clock_27mhz), .data({off_state,41'd0,roll_direction, roll, hover}), 
+	display_16hex hex(.reset(reset), .clock_27mhz(clock_27mhz), .data({48'd0, roll, hover}), 
 		.disp_blank(disp_blank), .disp_clock(disp_clock), .disp_rs(disp_rs), .disp_ce_b(disp_ce_b),
 		.disp_reset_b(disp_reset_b), .disp_data_out(disp_data_out));
-  
-
+ 
+////////////////////////////////////////////////////////////////////////////
+//
+// Gestures --> hover, pitch and roll
+//
+////////////////////////////////////////////////////////////////////////////
+ 
+ 
+	Bytes_to_Coords btc(	.clock(clock_27mhz),
+		 .reset(reset),.rxf(user4[9]),.rd(user4[8]),
+		 .data(user4[7:0]),.ready(data_ready),
+		 .x1(x1),.y1(y1),.z1(z1),
+		 .x2(x2),.y2(y2),.z2(z2),
+		 .newout(newout),.state(btc_state),.debug(debug));
+		 
+	setHandLocations set_hands(
+		 .x1(x1),.y1(y1),.z1(z1),
+		 .x2(x2),.y2(y2),.z2(z2),
+		 .left_x(left_x),.left_y(left_y),.left_z(left_z),
+		 .right_x(right_x),.right_y(right_y),.right_z(right_z)
+		 );
+		 
   gest_rec gr( 
      .clock(clock_27mhz),
-     .left_x(left_x),
-     .left_y(left_y),
-     .left_z(left_z),
-     .right_x(right_x),
-     .right_y(right_y),
-     .right_z(right_z),
-     .reset(reset),
-     .hover(hover),
-     .roll(roll),
-     .pitch(pitch),
-     .on(on),
-	  .off_state(off_state),
-	  .roll_direction(roll_direction)
-    );
+     .left_x(left_x),.left_y(left_y),.left_z(left_z),
+     .right_x(right_x),.right_y(right_y),.right_z(right_z),
+     .reset(!button_down),
+     .hover(hover),.roll(roll),.pitch(pitch),
+     .on(on));
 	 
+	 assign user4[10] = on;
+////////////////////////////////////////////////////////////////////////////
+//
+// Initialize Controller
+//
+////////////////////////////////////////////////////////////////////////////
+  	 
 	 wire [7:0] initial_signal;
 	 Initialize_Remote ir(.clock(clock_27mhz),
-		.initial_signal(initial_signal));
+		.on_state(on),
+		.initial_signal(initial_signal),
+		.debug(initialize_debug));
   
-  reg write_signal;
+////////////////////////////////////////////////////////////////////////////
+//
+// Write to DAC
+//
+////////////////////////////////////////////////////////////////////////////
   
+  
+  wire write_signal;
+  wire [7:0] gest_out;
+  wire [1:0] gest_select;
   assign user3[10] = write_signal;
-  reg [15:0] cycle_counter;
-  reg [7:0] gest_out;
-  reg [1:0] gest_select;
   assign user3[7:0] = gest_out;
   assign user3[9:8] = gest_select;
-  
-  always @(posedge clock_27mhz) begin
-		write_signal <= 1'b0;
-		//gest_select <= cycle_counter;
-		cycle_counter <= cycle_counter +1;
-//		case (cycle_counter)
-//			4'b00xxxxxxxx: gest_out <= hover[7:0] | switch[7:0];
-//			4'b01xxxxxxxx: gest_out <= roll[7:0];
-//			4'b10xxxxxxxx: gest_out <= pitch[7:0];
-//			default: gest_out <= 0;
-//		endcase
-		if (cycle_counter < 16384) begin
-		  gest_out <= hover[7:0] | switch[7:0];
-		  gest_select <= 0;
-		end
-		else if(cycle_counter < 32768) begin
-		  gest_out <= roll[7:0];
-		  gest_select <= 1;
-		end
-		else if (cycle_counter <49152) begin
-		  gest_out <= pitch[7:0];
-		  gest_select <= 2;
-		end
-		else begin
-		  gest_out <= 0;
-		  gest_select <= 3;
-		end
-		
-  end
+
+	write_to_DAC wtc(.clock(clock_27mhz),
+		.hover(switch[7:0]|hover[7:0]|initial_signal),
+		.pitch(pitch),
+		.roll(roll),
+		.write_signal(write_signal),
+		.gest_select(gest_select),
+		.gest_out(gest_out));
 	 
 	 
 	 
@@ -490,6 +458,7 @@ module labkit (beep, audio_reset_b, ac97_sdata_out, ac97_sdata_in, ac97_synch,
 //      .x2(x2),
 //      .y2(y2),
 //      .z2(z2));
+		.on(on),
 		.x1(left_x),
       .y1(left_y),
       .z1(left_z),

@@ -18,6 +18,9 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
+
+//takes 8 bit data from USB input module and converts to the hand coordinates
+
 module Bytes_to_Coords(
     input clock,
     input reset,
@@ -62,7 +65,6 @@ parameter Z2_LSB = 4'd13;
 parameter DONE = 4'd1;
 
 reg hold = 0;
-//wire [3:0] debug;
 wire [7:0] data_byte;
 reg done_writing = 0;
 reg reset_usb;
@@ -101,7 +103,6 @@ always @(posedge clock) begin
 			end
 			X1_MSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 					  x1[15:8] <= data_byte; //current_num;
 					  done_writing <= 1;
@@ -111,11 +112,9 @@ always @(posedge clock) begin
 						state <= X1_LSB;
 						hold <= 1;
 					end
-				//end
 			end
 			X1_LSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 						x1[7:0] <= data_byte; //current_num;
 						done_writing <= 1;
@@ -125,11 +124,9 @@ always @(posedge clock) begin
 						state <= Y1_MSB;
 						hold <= 1;
 					end
-				//end else x1[7:0] <= data_byte;
 			end
 			Y1_MSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 						y1[15:8] <= data_byte; //current_num;
 						done_writing <= 1;
@@ -139,11 +136,9 @@ always @(posedge clock) begin
 						state <= Y1_LSB;
 						hold <= 1;
 					end
-				//end
 			end
 			Y1_LSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 						done_writing <= 1;
 						y1[7:0] <= data_byte; //current_num;
@@ -153,11 +148,9 @@ always @(posedge clock) begin
 						state <= Z1_MSB;
 						hold <= 1;
 					end
-				//end
 			end
 			Z1_MSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 						done_writing <= 1;
 						z1[15:8] <= data_byte; //current_num;
@@ -167,11 +160,9 @@ always @(posedge clock) begin
 						done_writing <= 0;
 						hold <= 1;
 					end
-				//end
 			end
 			Z1_LSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 						done_writing <= 1;
 						z1[7:0] <= data_byte; //current_num;
@@ -181,11 +172,9 @@ always @(posedge clock) begin
 						done_writing <= 0;
 						hold <= 1;
 					end
-				//end
 			end
 			X2_MSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 						done_writing <= 1;
 						x2[15:8] <= data_byte; //current_num;
@@ -195,11 +184,9 @@ always @(posedge clock) begin
 						done_writing <= 0;
 						hold <= 1;
 					end
-				//end
 			end
 			X2_LSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 						done_writing <= 1;
 						x2[7:0] <= data_byte; //current_num;
@@ -209,11 +196,9 @@ always @(posedge clock) begin
 						done_writing <= 0;
 						hold <= 1;
 					end
-				//end
 			end
 			Y2_MSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 						done_writing <= 1;
 						y2[15:8] <= data_byte; //current_num;
@@ -223,11 +208,9 @@ always @(posedge clock) begin
 						done_writing <= 0;
 						hold <= 1;
 					end
-				//end
 			end
 			Y2_LSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 						done_writing <= 1;
 						y2[7:0] <= data_byte; //current_num;
@@ -237,11 +220,9 @@ always @(posedge clock) begin
 						 done_writing <= 0;
 						 hold <= 1;
 					end
-				//end
 			end
 			Z2_MSB:
 			begin
-				//if (coords_state == NUM) begin
 					if (!done_writing) begin
 						done_writing <= 1;
 						z2[15:8] <= data_byte; //current_num;
@@ -251,15 +232,12 @@ always @(posedge clock) begin
 						done_writing <= 0;
 						hold <= 1;
 					end
-				//end
 			end
 			Z2_LSB:
 			begin
-				//if (coords_state == NUM) begin
 					z2[7:0] <= data_byte; //current_num;
 					state <= DONE;
 					ready <= 1;
-				//end
 			end
 			DONE:
 			begin

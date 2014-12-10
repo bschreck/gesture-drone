@@ -28,10 +28,14 @@ module hand_locations_display (
  	
 	input [15:0] x1,
 	input [15:0] y1,
-	input [15:0] z1,
+	input [15:0] z1, //left
 	input [15:0] x2,
 	input [15:0] y2,
-	input [15:0] z2,
+	input [15:0] z2, //right
+	input [7:0] hover,
+	input [7:0] roll,
+	input [7:0] pitch,
+	input on,
 
    output phsync,	// horizontal sync
    output pvsync,	// vertical sync
@@ -43,43 +47,63 @@ module hand_locations_display (
    assign pvsync = vsync;
    assign pblank = blank;
 	
-	parameter MAX_Y = 10'd768;
-	parameter MAX_X = 11'd1024;
+	parameter MAX_Y = 10'd768; //max of display
+	parameter MAX_X = 11'd1024; //max of display
 	parameter MAX_Y_KINECT = 460;
 	parameter MAX_X_KINECT = 650;
-	parameter RESIZE_X = MAX_X/MAX_X_KINECT;
-	parameter RESIZE_Y = MAX_Y/MAX_Y_KINECT;
+	
+	//parameters for pitch
+	parameter MIN_Z_DEAD_ZONE = 800;
+	parameter MAX_Z_DEAD_ZONE = 1050;
+	
+	//parameters for colors
+	parameter RED = 24'hD0_00_00 ;
+	parameter WHITE = 24'hFF_FF_FF;
+	parameter BLUE = 24'h00_33_CC;
+	parameter YELLOW = 24'hFF_FF_00;
+	parameter DEAD_ZONE_COLOR = 24'h30_30_30;
+	parameter BLACK = 24'h00_00_00;
+	parameter gesture_lines_color = 24'h50_50_50 ;
 		
 	reg [15:0] x1_disp;
 	reg [15:0] y1_disp;
 	reg [15:0] x2_disp;
 	reg [15:0] y2_disp;
 	
-	wire [23:0] left_hand_color;
-	wire [23:0] right_hand_color;
-	wire [23:0] dead_zone_color = 24'h30_30_30 ;
-	wire [23:0] divider_color = 24'hFF_FF_FF ;
-	
-	pitch_color pc1(.z(z1),.color(left_hand_color));
-	pitch_color pc2(.z(z2),.color(right_hand_color));
+	reg [23:0] left_hand_color;
+	reg [23:0] right_hand_color;
+	wire [23:0] divider_color = WHITE ;
 	
 	wire [23:0] left_hand_pixel;
 	wire [23:0] right_hand_pixel;
 	wire [23:0] dead_zone_pixel;
 	wire [23:0] divider_pixel;
+	wire [23:0] dead_zone_line_pixel;
+	wire [23:0] on_pixel;
 	
 	always @(negedge vsync) begin
-//		x1_disp <= x1*RESIZE_X;
-//		y1_disp <= y1*RESIZE_Y;
-//		x2_disp <= x2*RESIZE_X;
-//		y2_disp <= y2*RESIZE_Y;
 		x1_disp <= (x1/2)*3;
 		y1_disp <= (y1/2)*3;
 		x2_disp <= (x2/2)*3;
 		y2_disp <= (y2/2)*3;
+		
+		if (z1 < MIN_Z_DEAD_ZONE) left_hand_color <= BLUE;//
+		else if (z1 < MAX_Z_DEAD_ZONE) left_hand_color <= WHITE;//
+		else left_hand_color <= RED;
+		
+		if (z2 < MIN_Z_DEAD_ZONE) right_hand_color <= BLUE;//
+		else if (z2 < MAX_Z_DEAD_ZONE) right_hand_color <= WHITE;//
+		else right_hand_color <= RED;
 
 	end
 	
+	
+////////////////////////////////////////////////////////////////////////////
+//
+// Hands
+//
+////////////////////////////////////////////////////////////////////////////
+
 	//left hand
 	blob  #(.WIDTH(64),.HEIGHT(64))
 			left_hand(.x(x1_disp),
@@ -94,13 +118,27 @@ module hand_locations_display (
 						 .hcount(hcount),.vcount(vcount),
 						 .pixel(right_hand_pixel),
 						 .color(right_hand_color));
+						 
+////////////////////////////////////////////////////////////////////////////
+//
+//  Dividers
+//
+////////////////////////////////////////////////////////////////////////////
+
 	//dead zone					 
 	blob  #(.WIDTH(MAX_X),.HEIGHT(MAX_Y/3))
 			dead_zone(.x(0),
 			          .y(2*MAX_Y/3),
 						 .hcount(hcount),.vcount(vcount),
 						 .pixel(dead_zone_pixel),
-						 .color(dead_zone_color));
+						 .color(DEAD_ZONE_COLOR));
+						 
+	blob  #(.WIDTH(MAX_X),.HEIGHT(3))
+			dead_zone_line(.x(0),
+			          .y(2*MAX_Y/3),
+						 .hcount(hcount),.vcount(vcount),
+						 .pixel(dead_zone_line_pixel),
+						 .color( gesture_lines_color ));
 	//center divider					 
 	blob  #(.WIDTH(3),.HEIGHT(MAX_Y))
 			divider(.x(MAX_X/2),
@@ -108,43 +146,81 @@ module hand_locations_display (
 						 .hcount(hcount),.vcount(vcount),
 						 .pixel(divider_pixel),
 						 .color(divider_color));
+	
+////////////////////////////////////////////////////////////////////////////
+//
+// Dividing lines for off gesture
+//
+////////////////////////////////////////////////////////////////////////////
+	
+	parameter line1 = MAX_X/5;
+	parameter line2 = 2*MAX_X/5;
+	parameter line3 = 3*MAX_X/5;
+	parameter line4 = 4*MAX_X/5;
+	wire [23:0] line1_pixel,line2_pixel,line3_pixel,line4_pixel;
+	
+	blob  #(.WIDTH(3),.HEIGHT(2*MAX_Y/3))
+			l1(.x(line1),
+			          .y(2*MAX_Y/3),
+						 .hcount(hcount),.vcount(vcount),
+						 .pixel(line1_pixel),
+						 .color( gesture_lines_color ));
+	
+	blob  #(.WIDTH(3),.HEIGHT(2*MAX_Y/3))
+			l2(.x(line2),.y(2*MAX_Y/3),.hcount(hcount),.vcount(vcount),
+				.pixel(line2_pixel), .color( gesture_lines_color ));
 						 
-	//dividing lines for on gesture
-	parameter vline1 = MAX_X/3;
-	parameter vline2 = 2*MAX_X/3;
-	parameter hline1 = MAX_Y/3;
-	parameter hline2 = 2*MAX_Y/3;
-	wire [23:0] vline1_pixel,vline2_pixel,hline1_pixel,hline2_pixel;
-	wire [23:0] gesture_lines_color = 24'h50_50_50 ;
-					 
-	blob  #(.WIDTH(MAX_X),.HEIGHT(3))
-			hl1(.x(0),
-			          .y(hline1),
-						 .hcount(hcount),.vcount(vcount),
-						 .pixel(hline1_pixel),
-						 .color( gesture_lines_color ));
-					 
-	blob  #(.WIDTH(MAX_X),.HEIGHT(3))
-			hl2(.x(0),
-			          .y(hline2),
-						 .hcount(hcount),.vcount(vcount),
-						 .pixel(hline2_pixel),
-						 .color( gesture_lines_color ));
-				 
-	blob  #(.WIDTH(3),.HEIGHT(MAX_Y))
-			vl1(.x(vline1),
-			          .y(0),
-						 .hcount(hcount),.vcount(vcount),
-						 .pixel(vline1_pixel),
-						 .color( gesture_lines_color ));
+	blob  #(.WIDTH(3),.HEIGHT(2*MAX_Y/3))
+			l3(.x(line3),.y(2*MAX_Y/3),.hcount(hcount),.vcount(vcount),
+				.pixel(line3_pixel),.color( gesture_lines_color ));
 						 
-	blob  #(.WIDTH(3),.HEIGHT(MAX_Y))
-			vl2(.x(vline2),
-			          .y(0),
-						 .hcount(hcount),.vcount(vcount),
-						 .pixel(vline2_pixel),
-						 .color( gesture_lines_color ));
+	blob  #(.WIDTH(3),.HEIGHT(2*MAX_Y/3))
+			l4(.x(line4),.y(2*MAX_Y/3),.hcount(hcount),.vcount(vcount),
+				.pixel(line4_pixel),.color( gesture_lines_color ));
+
+
+////////////////////////////////////////////////////////////////////////////
+//
+// ON
+//
+////////////////////////////////////////////////////////////////////////////
+
+	
+	wire [23:0] on_blob_color;
+	assign on_blob_color	= on? YELLOW:BLACK;
+	blob  #(.WIDTH(64 ),.HEIGHT(64))
+			on1(.x(MAX_X-64),.y(0),.hcount(hcount),.vcount(vcount),
+				.pixel(on_pixel),.color( on_blob_color ));
 						 
-	assign pixel = left_hand_pixel | right_hand_pixel | dead_zone_pixel | divider_pixel |vline1_pixel|vline2_pixel|hline1_pixel|hline2_pixel;
+						 
+	//draw mags for hover, pitch and roll
+	
+	wire [23:0] h_rec_pixel,h_mag_pixel;
+	parameter GRAY = 24'h98_98_98;
+	parameter GREEN = 24'h00_66_33;
+	wire [23:0] h_mag_val1;
+	wire [23:0] h_mag_val;
+	parameter b_t = 2*MAX_Y/3;
+	assign h_mag_val1 = hover[7:0]*b_t;
+	assign h_mag_val[23:0] = {8'b0, h_mag_val1[23:16]};
+//	
+	//bounding rectangle for hover
+//	blob  #(.WIDTH(100),.HEIGHT(2*MAX_Y/3))
+//			hover_rec(.x(0),
+//			          .y(2*MAX_Y/3),
+//						 .hcount(hcount),.vcount(vcount),
+//						 .pixel(h_rec_pixel),
+//						 .color( GRAY ));
+//	//hover mag					 
+//	blob  #(.WIDTH(100),.HEIGHT(2*MAX_Y/3))
+//			hover_mag(.x(0),
+//			          .y(2*MAX_Y/3),
+//						 .hcount(hcount),.vcount(vcount),
+//						 .pixel(h_mag_pixel),
+//						 .color( GREEN ));
+//						 
+	assign pixel = left_hand_pixel | right_hand_pixel | dead_zone_pixel | 
+						divider_pixel |line1_pixel|line2_pixel|line3_pixel|line4_pixel|
+						dead_zone_line_pixel|on_pixel|h_mag_pixel|h_rec_pixel;
    
 endmodule

@@ -32,14 +32,13 @@ module Hover
 
 reg [16:0] y_sum;
 reg [15:0] y; //average y's
-//wire [15:0] frac;
 parameter b_t = 2*MAX_Y/3;
 
 //if either hand in dead zone, hover = 0
 //if one hand is not sent, then only consider the hand that is sending
 //else average the hands
 always @(*) begin
-	if (y1 > b_t || y2 > b_t) y <= 9'd320; 
+	if (y1 > b_t || y2 > b_t|| (y1==0 && y2==0)) y <= 9'd320;  //turn off
 	else if (y1 == 0) y <= y2; 
 	else if (y2 == 0) y <= y1;
 	else begin

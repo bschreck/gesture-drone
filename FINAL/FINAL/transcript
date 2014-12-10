@@ -8,28 +8,38 @@
 # //  OF MENTOR GRAPHICS CORPORATION OR ITS LICENSORS
 # //  AND IS SUBJECT TO LICENSE TERMS.
 # //
-# do {on_off_state_test.fdo} 
+# do {initialize_test.fdo} 
 # ** Warning: (vlib-34) Library already exists at "work".
 # Model Technology ModelSim SE vlog 6.4a Compiler 2008.08 Aug 28 2008
-# -- Compiling module on_off_state
+# -- Compiling module Initialize_Remote
 # 
 # Top level modules:
-# 	on_off_state
+# 	Initialize_Remote
 # Model Technology ModelSim SE vlog 6.4a Compiler 2008.08 Aug 28 2008
-# -- Compiling module on_off_state_test
+# -- Compiling module initialize_test
 # 
 # Top level modules:
-# 	on_off_state_test
+# 	initialize_test
 # Model Technology ModelSim SE vlog 6.4a Compiler 2008.08 Aug 28 2008
 # -- Compiling module glbl
 # 
 # Top level modules:
 # 	glbl
-# vsim -L xilinxcorelib_ver -L unisims_ver -L unimacro_ver -lib work -t 1ps on_off_state_test glbl 
-# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
-# Loading work.on_off_state_test(fast)
-# Loading work.on_off_state(fast)
+# vsim -L xilinxcorelib_ver -L unisims_ver -L unimacro_ver -lib work -t 1ps initialize_test glbl 
+# Loading work.initialize_test(fast)
+# Loading work.Initialize_Remote(fast)
 # Loading work.glbl(fast)
+# ** Warning: (vsim-3017) ../sources/initialize_test.v(39): [TFMPC] - Too few port connections. Expected 4, found 3.
+#         Region: /initialize_test/uut
+# ** Warning: (vsim-3722) ../sources/initialize_test.v(39): [TFMPC] - Missing connection for port 'debug'.
 # .main_pane.mdi.interior.cs.vm.paneset.cli_0.wf.clip.cs.pw.wf
 # .main_pane.workspace.interior.cs.nb.canvas.notebook.cs.page2.cs
 # .main_pane.signals.interior.cs
+restart -f
+# Loading work.initialize_test(fast)
+# Loading work.Initialize_Remote(fast)
+# Loading work.glbl(fast)
+# ** Warning: (vsim-3017) ../sources/initialize_test.v(39): [TFMPC] - Too few port connections. Expected 4, found 3.
+#         Region: /initialize_test/uut
+# ** Warning: (vsim-3722) ../sources/initialize_test.v(39): [TFMPC] - Missing connection for port 'debug'.
+run 2000ns
