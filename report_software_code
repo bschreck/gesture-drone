@@ -1,0 +1,163 @@
+//////Main.cpp additions
+ char portname[] = "/dev/cu.usbserial-DPE0AJZN";
+ int fd = initializeSerialPort(portname);
+////////////
+//////PointDrawer.cpp additions
+  std::map<XnUInt32, std::list<XnPoint3D> >::const_iterator PointIterator;
+  std::list<XnPoint3D>::const_iterator PositionIterator;
+
+  // Find first 2 hands
+  // first hand
+  PointIterator = m_History.begin();
+  PositionIterator = PointIterator->second.begin();
+  XnPoint3D ptl(*PositionIterator);
+  HandCoordinates hand;
+  hand.left_x= int(ptl.X);
+  hand.left_y=int(ptl.Y);
+  hand.left_z=int(ptl.Z);
+
+   //second hand
+  if (++PointIterator != m_History.end()) {
+    PositionIterator = PointIterator->second.begin();
+    XnPoint3D ptr(*PositionIterator);
+    hand.right_x= int(ptr.X);
+    hand.right_y=int(ptr.Y);
+    hand.right_z=int(ptr.Z);
+  } else {
+    hand.right_x= 0;
+    hand.right_y= 0;
+    hand.right_z= 0;
+  }
+  serialize(&hand, ((char*)&out_coords)+out_coords_index);
+  out_coords_index += sizeof(SerialHandCoordinates);
+  if (out_coords_index == sizeof(SerialHandCoordinates)*HAND_COORD_BUF_SIZE) {
+    int n = write (fd, out_coords, sizeof(out_coords));
+    if (n < 0)
+      fputs("write() of hand coords failed!\n", stderr);
+
+    out_coords_index = 0;
+  }
+///////////
+//////////SerialWrite.h////
+typedef struct {
+  uint16_t left_x;
+  uint16_t left_y;
+  uint16_t left_z;
+  uint16_t right_x;
+  uint16_t right_y;
+  uint16_t right_z;
+} HandCoordinates;
+
+typedef char SerialHandCoordinates[sizeof(uint16_t)*6+1];
+//tets
+void serialize(HandCoordinates* hc, SerialHandCoordinates serial_hc);
+int initializeSerialPort(char *portname);
+///////////////
+//////////SerialWrite.cpp////
+#include "SerialWrite.h"
+
+void serialize(HandCoordinates* hc, char *q)
+{
+    *q = 'S';                            q++;
+    *q = *(((char*)&(hc->left_x))+1);    q++;
+    *q = *((char*) &(hc->left_x));       q++;
+
+    *q = *(((char*)&(hc->left_y))+1);    q++;
+    *q = *((char*) &(hc->left_y));       q++;
+
+    *q = *(((char*)&(hc->left_z))+1);    q++;
+    *q = *((char*) &(hc->left_z));       q++;
+
+    *q = *(((char*)&(hc->right_x))+1);   q++;
+    *q = *((char*) &(hc->right_x));      q++;
+
+    *q = *(((char*)&(hc->right_y))+1);   q++;
+    *q = *((char*) &(hc->right_y));      q++;
+
+    *q = *(((char*)&(hc->right_z))+1);   q++;
+    *q = *((char*) &(hc->right_z));      q++;
+
+};
+
+
+int
+set_interface_attribs (int fd, int speed, int parity)
+{
+        struct termios tty;
+        memset (&tty, 0, sizeof tty);
+        if (tcgetattr (fd, &tty) != 0)
+        {
+                printf("error %d from tcgetattr", errno);
+                return -1;
+        }
+
+        cfsetospeed (&tty, speed);
+        cfsetispeed (&tty, speed);
+
+        tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;     // 8-bit chars
+        // disable IGNBRK for mismatched speed tests; otherwise receive break
+        // as \000 chars
+        //tty.c_iflag &= ~IGNBRK;         // disable break processing
+        tty.c_iflag &= IGNBRK;         // disable break processing
+        tty.c_lflag = 0;                // no signaling chars, no echo,
+                                        // no canonical processing
+        tty.c_oflag = 0;                // no remapping, no delays
+        tty.c_cc[VMIN]  = 0;            // read doesn't block
+        tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
+
+        tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
+
+        tty.c_cflag |= (CLOCAL | CREAD);// ignore modem controls,
+                                        // enable reading
+        tty.c_cflag &= ~(PARENB | PARODD);      // shut off parity
+        tty.c_cflag |= parity;
+        tty.c_cflag &= ~CSTOPB;
+        tty.c_cflag &= ~CRTSCTS;
+
+        if (tcsetattr (fd, TCSANOW, &tty) != 0)
+        {
+                printf("error %d from tcsetattr", errno);
+                return -1;
+        }
+        return 0;
+}
+
+void
+set_blocking (int fd, int should_block)
+{
+        struct termios tty;
+        memset (&tty, 0, sizeof tty);
+        if (tcgetattr (fd, &tty) != 0)
+        {
+                printf("error %d from tggetattr", errno);
+                return;
+        }
+
+        tty.c_cc[VMIN]  = should_block ? 1 : 0;
+        tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
+
+        if (tcsetattr (fd, TCSANOW, &tty) != 0)
+                printf("error %d setting term attributes", errno);
+}
+
+
+enum
+{
+    kNumRetries = 3
+};
+
+int initializeSerialPort(char *portname) {
+  int fd = open (portname, O_RDWR | O_NOCTTY | O_SYNC);
+  printf("FD OPEN, fd = %d", fd);
+  if (fd < 0)
+  {
+          printf("error %d opening %s: %s", errno, portname, strerror (errno));
+          return -1;
+  }
+
+  set_interface_attribs (fd, B9600, 0);  // set speed to 115,200 bps, 8n1 (no parity)
+  set_blocking (fd, 0);                // set no blocking
+  return fd;
+
+}
+///////////////////

@@ -51,7 +51,7 @@ typedef struct {
 } HandCoordinates;
 
 typedef char SerialHandCoordinates[sizeof(uint16_t)*6+1];
-
+//tets
 void serialize(HandCoordinates* hc, SerialHandCoordinates serial_hc);
 
 
